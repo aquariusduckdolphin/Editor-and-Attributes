@@ -20,8 +20,6 @@ namespace QuickFlow
 
             float _spacing = 20f;
 
-            //QuickColors _color = QuickColors.White;
-
             Color _color = Color.white;
 
             height = _height;
@@ -32,7 +30,7 @@ namespace QuickFlow
 
         }
 
-        /*public SeparatorAttribute(QuickColors _color)
+        /*public SeparatorAttribute(Color _color)
         {
 
             float _height = 1f;
@@ -50,7 +48,7 @@ namespace QuickFlow
         public SeparatorAttribute(float _spacing)
         {
 
-            QuickColors _color = QuickColors.White;
+            Color _color = Color.white;
 
             float _height = 1f;
 
@@ -62,7 +60,7 @@ namespace QuickFlow
 
         }
 
-        public SeparatorAttribute(float _height, QuickColors _color)
+        public SeparatorAttribute(float _height, Color _color)
         {
 
             float _spacing = 10f;
@@ -75,7 +73,7 @@ namespace QuickFlow
 
         }
 
-        public SeparatorAttribute(float _height, float _spacing, QuickColors _color)
+        public SeparatorAttribute(float _height, float _spacing, Color _color)
         {
 
             height = _height;
@@ -84,8 +82,8 @@ namespace QuickFlow
 
             color = _color;
 
-        }*/
-
+        }
+        */
     }
 
 }

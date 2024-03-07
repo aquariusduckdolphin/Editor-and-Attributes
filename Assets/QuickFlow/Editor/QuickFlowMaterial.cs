@@ -2,42 +2,47 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 #if UNITY_EDITOR
-namespace QuickFlow.MaterialPopup
+namespace QuickFlow.Editor
 {
 
-    public class QuickFlowMaterial : MonoBehaviour
+    #region Menu Display
+    public class QuickFlowCreateMaterialWindow : MonoBehaviour
     {
 
         [MenuItem("Tools/QuickFlow/QuickFlow Window Material #m")]
         public static void Window()
         {
 
-            MaterialPopup.MaterialWindow.Window();
+            MaterialEditorWindow.Window();
 
         }
 
     }
+    #endregion
 
-    public class MaterialWindow : EditorWindow
+    #region Display Window Material 
+    public class MaterialEditorWindow : EditorWindow
     {
 
         #region Create Window
         public static void Window()
         {
 
-            var window = GetWindow<MaterialWindow>();
+            var window = GetWindow<MaterialEditorWindow>();
 
-            window.minSize = new Vector2(300f, 1000f);
+            window.minSize = new Vector2(300f, 600f);
+
+            window.maxSize = window.minSize;
 
             window.Show();
 
         }
         #endregion
 
-        private string materialName = null;
-
+        #region Material Variables
         private Material material;
         
         public Texture2D albedo;
@@ -55,7 +60,51 @@ namespace QuickFlow.MaterialPopup
         public bool isEmissive;
 
         public Texture2D emission;
+        #endregion
 
+        private bool standardMaterial = true;
+
+        private const string standard = "Standard";
+
+        private bool urpMaterial = false;
+
+        private const string urp = "";
+
+        private bool hdrpMaterial = false;
+
+        private const string hdrp = "HDRP/Lit";
+
+        #region Indentation
+        void SetIndentation(int indentAmount, bool value)
+        {
+
+            if (value)
+            {
+
+                for (int i = 0; i < indentAmount; i++)
+                {
+
+                    EditorGUI.indentLevel++;
+
+                }
+
+            }
+            else
+            {
+
+                for (int i = 0; i < indentAmount; i++)
+                {
+
+                    EditorGUI.indentLevel--;
+
+                }
+
+            }
+
+        }
+        #endregion
+
+        #region Show in Window
         private void OnGUI()
         {
 
@@ -88,41 +137,14 @@ namespace QuickFlow.MaterialPopup
 
             }
 
-
         }
+        #endregion
 
-        void SetIndentation(int indentAmount, bool value)
-        {
-
-            if (value)
-            {
-
-                for (int i = 0; i < indentAmount; i++)
-                {
-
-                    EditorGUI.indentLevel++;
-
-                }
-
-            }
-            else
-            {
-
-                for (int i = 0; i < indentAmount; i++)
-                {
-
-                    EditorGUI.indentLevel--;
-
-                }
-
-            }
-
-        }
-
+        #region Create the Material
         void CreateMaterial()
         {
 
-            material = new Material(Shader.Find("Standard"));
+            material = new Material(Shader.Find(standard));
 
             material.SetTexture("_MainTex", albedo);
 
@@ -141,8 +163,6 @@ namespace QuickFlow.MaterialPopup
 
             }
 
-            Debug.Log("Material");
-
             string path = EditorUtility.SaveFilePanelInProject("Save Material", "New Material", "mat", "Save Material");
             
             if (!string.IsNullOrEmpty(path))
@@ -154,19 +174,19 @@ namespace QuickFlow.MaterialPopup
                 
                 AssetDatabase.Refresh();
                 
-                Debug.Log("Material created and saved at: " + path);
-            
             }
             else
             {
 
-                Debug.LogWarning("Material creation cancelled.");
-            
+                Debug.Log("Material failed to be created!");
+
             }
 
         }
+        #endregion
 
     }
+    #endregion
 
 }
 #endif

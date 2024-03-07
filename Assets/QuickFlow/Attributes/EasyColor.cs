@@ -188,7 +188,7 @@ namespace QuickFlow
 
                 case QuickColors.Clear:
                     return new Color32(0, 0, 0, 0);
-                case QuickColors.White:
+                case QuickColors.white:
                     return new Color32(255, 255, 255, 1);
                 case QuickColors.Black:
                     return new Color32(0, 0, 0, 1);
@@ -221,7 +221,7 @@ namespace QuickFlow
                 case QuickColors.Blue_Violet:
                     return new Color32(138, 43, 226, 1);
                 case QuickColors.Red_Violet:
-                    return new Color32(199, 21, 133, 1);
+                    return new Color32                        (199, 21, 133, 1);
                 default:
                     return new Color32(255, 255, 255, 1);
 
@@ -236,7 +236,7 @@ namespace QuickFlow
                 case QuickColors.crimson:
                     return new Color32(220, 20, 60, 1);
                 case QuickColors.red:
-                    return new Color32(255, 0, 0, 1);
+                    return new Color32    (255, 0, 0, 1);
                 case QuickColors.tomato:
                     return new Color32(255, 99, 71, 1);
                 case QuickColors.coral:
