@@ -35,9 +35,7 @@ namespace QuickFlow.Editor
 
             var window = GetWindow<MaterialEditorWindow>();
 
-            window.minSize = new Vector2(300f, 550f);
-
-            window.maxSize = window.minSize;
+            window.minSize = new Vector2(300f, 640f);
 
             window.Show();
 
@@ -47,34 +45,38 @@ namespace QuickFlow.Editor
         #region Material Variables
         private Material material;
         
-        public Texture2D albedo;
+        private Texture2D albedo;
 
-        public Texture2D metallic;
+        private Texture2D metallic;
 
-        public Texture2D roughness;
+        private bool useRoughness = false;
 
-        public Texture2D normal;
+        private Texture2D roughness;
 
-        public Texture2D height;
+        private Texture2D normal;
 
-        public Texture2D occlusion;
+        private Texture2D height;
 
-        public bool isEmissive;
+        private Texture2D occlusion;
 
-        public Texture2D emission;
+        private bool isEmissive;
+
+        private Texture2D emission;
         #endregion
 
+        #region Material Type
         private bool standardMaterial = true;
 
         private const string standard = "Standard";
 
-        private bool urpMaterial = false;
+        /*private bool urpMaterial = false;
 
-        private const string urp = "Universial Render Pipeline/Lit";
+        private const string urp = "Universial Render Pipeline/Unlit";
 
         private bool hdrpMaterial = false;
 
-        private const string hdrp = "HDRP/Lit";
+        private const string hdrp = "HDRP/Lit";*/
+        #endregion
 
         #region Indentation
         void SetIndentation(int indentAmount, bool value)
@@ -114,13 +116,19 @@ namespace QuickFlow.Editor
             EditorGUILayout.LabelField("Material", EditorStyles.boldLabel);
             SetIndentation(6, false);
 
-            Tooget();
+            ToggleGroups();
 
             albedo = EditorGUILayout.ObjectField("Albedo Map", albedo, typeof(Texture2D), false) as Texture2D;
 
             metallic = EditorGUILayout.ObjectField("Metallic Map", metallic, typeof(Texture2D), false) as Texture2D;
 
+            useRoughness = EditorGUILayout.BeginToggleGroup("Use Roughness Map", useRoughness);
+
             roughness = EditorGUILayout.ObjectField("Roughness Map", roughness, typeof(Texture2D), false) as Texture2D;
+
+            EditorGUILayout.EndToggleGroup();
+
+            EditorGUILayout.HelpBox("Having the roughness map checked means that the metallic map will not be used.", MessageType.Info);
 
             normal = EditorGUILayout.ObjectField("Normal Map", normal, typeof(Texture2D), false) as Texture2D;
 
@@ -133,6 +141,8 @@ namespace QuickFlow.Editor
             emission = EditorGUILayout.ObjectField("Emission Map", emission, typeof(Texture2D), false) as Texture2D;
 
             EditorGUILayout.EndToggleGroup();
+
+            EditorGUILayout.Space();
 
             if (GUILayout.Button("Create Material", GUILayout.ExpandWidth(true), GUILayout.Height(45)))
             {
@@ -155,17 +165,34 @@ namespace QuickFlow.Editor
 
 
             }
-            else if (hdrpMaterial)
+            /*else if (hdrpMaterial)
             {
 
                 material = new Material(Shader.Find(hdrp));
 
             }
+            else if (urpMaterial)
+            {
 
+                material = new Material(Shader.Find(urp));
+
+            }*/
 
             material.SetTexture("_MainTex", albedo);
 
-            material.SetTexture("_MetallicGlossMap", metallic);
+            if (!useRoughness)
+            {
+
+                material.SetTexture("_MetallicGlossMap", metallic);
+
+            }
+            else
+            {
+
+                material.SetTexture("_MetallicGlossMap", roughness);
+
+            }
+
 
             material.SetTexture("_OcclusionMap", occlusion);
 
@@ -180,17 +207,26 @@ namespace QuickFlow.Editor
 
             }
 
+            OpenFolderForMaterialDisplay();
+
+        }
+        #endregion
+
+        #region Allow the user to place the material and name
+        private void OpenFolderForMaterialDisplay()
+        {
+
             string path = EditorUtility.SaveFilePanelInProject("Save Material", "New Material", "mat", "Save Material");
-            
+
             if (!string.IsNullOrEmpty(path))
             {
 
                 AssetDatabase.CreateAsset(material, path);
-                
+
                 AssetDatabase.SaveAssets();
-                
+
                 AssetDatabase.Refresh();
-                
+
             }
             else
             {
@@ -202,21 +238,28 @@ namespace QuickFlow.Editor
         }
         #endregion
 
-        private void Tooget()
+        #region Toggle for Material Type
+        private void ToggleGroups()
         {
 
-            standardMaterial = EditorGUILayout.BeginToggleGroup("Standard Material", standardMaterial);
-            
-            //EditorGUI.BeginDisabledGroup(standardMaterial);
+            //standardMaterial = EditorGUILayout.Toggle("Standard Material", standardMaterial);
 
-            //hdrpMaterial = EditorGUILayout.BeginToggleGroup("HDRP Material", hdrpMaterial);
+            EditorGUILayout.LabelField("Material Shader: Standard");
 
-            //EditorGUI.EndDisabledGroup();
+            /*EditorGUI.BeginDisabledGroup(standardMaterial);
 
-            EditorGUILayout.EndToggleGroup();
+            hdrpMaterial = EditorGUILayout.Toggle("HDRP Material", hdrpMaterial);
 
+            EditorGUI.BeginDisabledGroup(hdrpMaterial);
+
+            urpMaterial = EditorGUILayout.Toggle("URP Material", urpMaterial);
+
+            EditorGUI.EndDisabledGroup();
+
+            EditorGUI.EndDisabledGroup();*/
 
         }
+        #endregion
 
     }
     #endregion
