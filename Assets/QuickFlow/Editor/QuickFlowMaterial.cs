@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
+#region Directives
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static UnityEngine.GraphicsBuffer;
+#endregion
 
 #if UNITY_EDITOR
 namespace QuickFlow.Editor
