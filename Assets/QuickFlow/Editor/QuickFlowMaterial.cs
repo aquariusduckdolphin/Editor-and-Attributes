@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static UnityEngine.GraphicsBuffer;
 
 #if UNITY_EDITOR
 namespace QuickFlow.Editor
@@ -33,7 +35,7 @@ namespace QuickFlow.Editor
 
             var window = GetWindow<MaterialEditorWindow>();
 
-            window.minSize = new Vector2(300f, 600f);
+            window.minSize = new Vector2(300f, 550f);
 
             window.maxSize = window.minSize;
 
@@ -68,7 +70,7 @@ namespace QuickFlow.Editor
 
         private bool urpMaterial = false;
 
-        private const string urp = "";
+        private const string urp = "Universial Render Pipeline/Lit";
 
         private bool hdrpMaterial = false;
 
@@ -112,6 +114,8 @@ namespace QuickFlow.Editor
             EditorGUILayout.LabelField("Material", EditorStyles.boldLabel);
             SetIndentation(6, false);
 
+            Tooget();
+
             albedo = EditorGUILayout.ObjectField("Albedo Map", albedo, typeof(Texture2D), false) as Texture2D;
 
             metallic = EditorGUILayout.ObjectField("Metallic Map", metallic, typeof(Texture2D), false) as Texture2D;
@@ -144,7 +148,20 @@ namespace QuickFlow.Editor
         void CreateMaterial()
         {
 
-            material = new Material(Shader.Find(standard));
+            if (standardMaterial)
+            {
+
+                material = new Material(Shader.Find(standard));
+
+
+            }
+            else if (hdrpMaterial)
+            {
+
+                material = new Material(Shader.Find(hdrp));
+
+            }
+
 
             material.SetTexture("_MainTex", albedo);
 
@@ -184,6 +201,22 @@ namespace QuickFlow.Editor
 
         }
         #endregion
+
+        private void Tooget()
+        {
+
+            standardMaterial = EditorGUILayout.BeginToggleGroup("Standard Material", standardMaterial);
+            
+            //EditorGUI.BeginDisabledGroup(standardMaterial);
+
+            //hdrpMaterial = EditorGUILayout.BeginToggleGroup("HDRP Material", hdrpMaterial);
+
+            //EditorGUI.EndDisabledGroup();
+
+            EditorGUILayout.EndToggleGroup();
+
+
+        }
 
     }
     #endregion
