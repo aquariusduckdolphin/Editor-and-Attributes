@@ -11,7 +11,7 @@ namespace QuickFlow.Editor
     public class QuickFlowCreateMaterialWindow : MonoBehaviour
     {
 
-        [MenuItem("Tools/QuickFlow/QuickFlow Window Material #m")]
+        [MenuItem("QuickFlow/QuickFlow Material Editor Window #m")]
         public static void Window()
         {
 
